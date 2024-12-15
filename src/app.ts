@@ -1,3 +1,18 @@
+//Drag & Drop Interfaces
+
+interface Draggable {
+    dragStartHandler(event: DragEvent): void;
+    dragEndHandler(event: DragEvent): void;
+
+}
+
+
+interface DragTarget {
+    dragOverHandler(event: DragEvent): void;
+    dropHandler(event: DragEvent): void;
+    dragLeaveHandler(event: DragEvent): void;
+}
+
 // Project Type
 enum ProjectStatus {
     Active,
@@ -149,7 +164,7 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
     abstract renderContent(): void;
 }
 
-class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Draggable {
     private project: Project;
 
     get persons() {
@@ -167,8 +182,21 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
         this.configure();
         this.renderContent();
     }
+    @autobind
+    dragStartHandler(event: DragEvent): void {
+        console.log(event);
+        // throw new Error("Method not implemented.");
+    }
+    @autobind
+    dragEndHandler(_: DragEvent): void {
+        console.log('Drag end');
+        // throw new Error("Method not implemented.");
+    }
 
     configure(): void {
+        this.element.addEventListener('dragstart', this.dragStartHandler);
+        this.element.addEventListener('dragend', this.dragEndHandler);
+
        
     }
     renderContent() {
